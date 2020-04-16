@@ -15,10 +15,10 @@ class Paynet extends Driver
     public function __construct()
     {
         $this->api = new PaynetAPI(
-            config('paynet.secret'),
-            config('paynet.secret'),
-            config('paynet.user'),
-            config('paynet.password')
+            config('payment.paynet.secret'),
+            config('payment.paynet.secret'),
+            config('payment.paynet.user'),
+            config('payment.paynet.password')
         );
     }
 
