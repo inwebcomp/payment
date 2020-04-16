@@ -16,15 +16,15 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('payer_type');
-            $table->string('payer_id');
+            $table->string('payer_type')->nullable();
+            $table->string('payer_id')->nullable();
             $table->string('payable_type')->nullable();
             $table->unsignedInteger('payable_id')->nullable();
             $table->tinyInteger('status');
             $table->double('amount');
             $table->text('detail')->nullable();
             $table->timestamps();
-            $table->dateTime('closed_at')->nullable();
+            $table->dateTime('canceled_at')->nullable();
         });
     }
 

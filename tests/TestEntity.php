@@ -13,12 +13,12 @@ class TestEntity extends Model implements Payable
 
     protected $fillable = ['*'];
 
-    public function getPaymentAmount(Payer $payer)
+    public function getPaymentAmount(Payer $payer = null)
     {
         return (float) $this->price;
     }
 
-    public function getPaymentDetail(Payer $payer)
+    public function getPaymentDetail(Payer $payer = null)
     {
         return null;
     }

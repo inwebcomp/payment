@@ -29,6 +29,10 @@ class PaymentServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
+        \App::bind('payment', function () {
+            return new Drivers\Paynet\Paynet();
+        });
+
         if ($this->app->runningInConsole()) {
             $this->registerPublishing();
         }
