@@ -39,14 +39,14 @@ class Paynet extends Driver
         $prequest->Services = $payable->getpaymentServices();
 
         $prequest->Customer = $payable->getCustomerDetail();
-        dump($prequest);
+
         $button = $this->createButton($buttonInfo);
 
         $paymentRegObj = $this->api->PaymentReg($prequest, $button);
 
         if (! $paymentRegObj->Data)
             \Log::critical("Can't create payment form", $paymentRegObj->toArray());
-        dd($paymentRegObj);
+
         return $paymentRegObj->Data;
     }
 
