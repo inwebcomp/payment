@@ -18,4 +18,13 @@ class PaynetResult
     {
         return $this->Code === PaynetCode::SUCCESS;
     }
+
+    public function toArray()
+    {
+        return [
+            'code'    => $this->Code,
+            'message' => $this->Message,
+            'data'    => $this->Data,
+        ];
+    }
 }
