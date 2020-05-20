@@ -30,28 +30,33 @@ class PaynetAPI
     /**
      * The base URL to UI
      */
-    const PAYNET_BASE_UI_URL = "https://test.paynet.md/acquiring/setecom";        // production link: https://paynet.md/acquiring/setecom
+    private $PAYNET_BASE_UI_URL = "https://test.paynet.md/acquiring/setecom";        // production link: https://paynet.md/acquiring/setecom
     /**
      * The base URL to UI
      */
-    const PAYNET_BASE_UI_SERVER_URL = "https://test.paynet.md/acquiring/getecom";  // production link: https://paynet.md/acquiring/getecom
+    private $PAYNET_BASE_UI_SERVER_URL = "https://test.paynet.md/acquiring/getecom";  // production link: https://paynet.md/acquiring/getecom
     /**
      * The base URL to API
      */
-    const PAYNET_BASE_API_URL = 'https://test.paynet.md:4446';                     // production link: https://paynet.md:4446
+    private $PAYNET_BASE_API_URL = 'https://test.paynet.md:4446';                     // production link: https://paynet.md:4446
     /**
      * The expiry time for this operation, in hours
      */
     const EXPIRY_DATE_HOURS = 4;//  hours
     const ADAPTING_HOURS = 1;//  hours
 
-    public function __construct($merchant_code = null, $merchant_secret_key = null, $merchant_user = null, $merchant_user_password = null)
+    public function __construct($merchant_code = null, $merchant_secret_key = null, $merchant_user = null, $merchant_user_password = null, $base_url = null)
     {
         $this->merchant_code = $merchant_code;
         $this->merchant_secret_key = $merchant_secret_key;
         $this->merchant_user = $merchant_user;
         $this->merchant_user_password = $merchant_user_password;
-        $this->api_base_url = self::PAYNET_BASE_API_URL;
+        $this->PAYNET_BASE_API_URL = $base_url;
+
+        $base_host = preg_replace('/:\d+$/', '', $base_url);
+
+        $this->PAYNET_BASE_UI_URL = $base_host . '/acquiring/setecom';
+        $this->PAYNET_BASE_UI_SERVER_URL = $base_host . '/acquiring/getecom';
     }
 
     public function Version()
@@ -150,7 +155,7 @@ class PaynetAPI
 
         $pRequest->Service["Amount"] = $amount;
         $signature = $this->SignatureGet($pRequest);
-        $pp_form = '<form method="POST" action="' . self::PAYNET_BASE_UI_URL . '">' .
+        $pp_form = '<form method="POST" action="' . $this->PAYNET_BASE_UI_URL . '">' .
             '<input type="hidden" name="ExternalID" value="' . $pRequest->ExternalID . '"/>' .
             '<input type="hidden" name="Services[0][Description]" value="' . htmlspecialchars_decode($pRequest->Service["Description"]) . '"/>' .
             '<input type="hidden" name="Services[0][Name]" value="' . htmlspecialchars_decode($pRequest->Service["Name"]) . '"/>' .
@@ -222,7 +227,7 @@ class PaynetAPI
     {
         $result = new PaynetResult();
 
-        $url = $this->api_base_url . $path;
+        $url = $this->PAYNET_BASE_API_URL . $path;
 
         if ($query_params and count($query_params) > 0) {
             $url .= '?' . http_build_query($query_params);
@@ -316,12 +321,13 @@ class PaynetAPI
     /**
      * @param              $pRequest
      * @param              $paymentId
+     * @param              $signature
      * @param              $button
      * @return string
      */
     public function createPaymentButtonForm($pRequest, $paymentId, $signature, $button) : string
     {
-        $pp_form = '<form method="POST" action="' . self::PAYNET_BASE_UI_SERVER_URL . '">' .
+        $pp_form = '<form method="POST" action="' . $this->PAYNET_BASE_UI_SERVER_URL . '">' .
             '<input type="hidden" name="operation" value="' . htmlspecialchars_decode($paymentId) . '"/>' .
             '<input type="hidden" name="LinkUrlSucces" value="' . htmlspecialchars_decode($pRequest->LinkSuccess) . '"/>' .
             '<input type="hidden" name="LinkUrlCancel" value="' . htmlspecialchars_decode($pRequest->LinkCancel) . '"/>' .

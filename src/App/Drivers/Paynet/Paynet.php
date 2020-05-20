@@ -18,7 +18,8 @@ class Paynet extends Driver
             config('payment.paynet.code'),
             config('payment.paynet.secret'),
             config('payment.paynet.user'),
-            config('payment.paynet.password')
+            config('payment.paynet.password'),
+            config('payment.paynet.base_url')
         );
     }
 
