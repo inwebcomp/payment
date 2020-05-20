@@ -200,7 +200,7 @@ class PaynetAPI
         $tokenReq = $this->TokenGet(true);
         $result = new PaynetResult();
 
-        if ($tokenReq->IsOk()) {
+        if ($tokenReq->IsOk()) { dd($params);
             $resultCheck = $this->callApi($path, 'POST', $params, null, $tokenReq->Data);
             if ($resultCheck->IsOk()) {
                 $result->Code = $resultCheck->Code;
