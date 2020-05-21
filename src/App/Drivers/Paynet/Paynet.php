@@ -32,7 +32,7 @@ class Paynet extends Driver
         $prequest->ExternalID = $payment->id;
         $prequest->LinkSuccess = $successPath;
         $prequest->LinkCancel = $cancelPath;
-        $prequest->Lang = 'ru';
+        $prequest->Lang = \App::getLocale();
 
         $prequest->Amount = (int) $payment->amount * 100;
 
