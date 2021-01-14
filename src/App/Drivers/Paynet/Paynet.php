@@ -27,7 +27,10 @@ class Paynet extends Driver
     {
         /** @var Payable $payable */
         $payable = $payment->payable;
-
+        
+        /** @var Payer $payer */
+        $payer = $payment->payer;
+        
         $prequest = new PaynetRequest();
         $prequest->ExternalID = $payment->id;
         $prequest->LinkSuccess = $successPath;
@@ -38,7 +41,7 @@ class Paynet extends Driver
 
         $prequest->Services = $payable->getpaymentServices();
 
-        $prequest->Customer = $payable->getCustomerDetail();
+        $prequest->Customer = $payable->getCustomerDetail($payer);
 
         $button = $this->createButton($buttonInfo);
 
