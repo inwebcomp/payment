@@ -19,6 +19,7 @@ use InWeb\Base\Entity;
  * @property Carbon updated_at
  * @property Carbon canceled_at
  * @property string link
+ * @property string|null gatewayUrl
  */
 class Payment extends Entity
 {
@@ -127,5 +128,23 @@ class Payment extends Entity
         $this->canceled_at = now();
 
         return $this->save();
+    }
+
+    public function setDetail($data, $append = false)
+    {
+        if ($append === false) {
+            $detail = [];
+        } else {
+            $detail = $this->detail ?? [];
+        }
+
+        $detail = array_merge($detail, $data);
+
+        $this->detail = $detail;
+    }
+
+    public function getGatewayUrlAttribute(): string | null
+    {
+        return optional($this->detail)['gateway_url'];
     }
 }
