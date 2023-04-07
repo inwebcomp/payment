@@ -3,22 +3,23 @@
 namespace InWeb\Payment\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use InWeb\Base\Entity;
+use InWeb\Payment\Contracts\Payable;
+use InWeb\Payment\Contracts\Payer;
 
 /**
  * Class Payment
  * @package InWeb\Payment\Models
- * @property Model  payer
- * @property Model  payable
- * @property int    status
- * @property float  amount
- * @property array  detail
- * @property Carbon created_at
- * @property Carbon updated_at
- * @property Carbon canceled_at
- * @property string link
+ * @property Payer       payer
+ * @property Payable     payable
+ * @property int         status
+ * @property float       amount
+ * @property array       detail
+ * @property Carbon      created_at
+ * @property Carbon      updated_at
+ * @property Carbon      canceled_at
+ * @property string      link
  * @property string|null gatewayUrl
  */
 class Payment extends Entity
@@ -93,8 +94,9 @@ class Payment extends Entity
     public function statusInfo()
     {
         foreach (self::statuses() as $status) {
-            if ($status['value'] == $this->status)
+            if ($status['value'] == $this->status) {
                 return $status;
+            }
         }
     }
 

@@ -8,7 +8,7 @@ abstract class Driver
 {
     const PAYMENT_STATUS_SUCCESS = null;
 
-    abstract public function createPayment(Payment $payment, $successPath, $cancelPath, $buttonInfo = null);
+    abstract public function createPayment(Payment $payment, $successPath, $cancelPath, $buttonInfo = null): Payment;
 
-    abstract public function getPaymentInfo(Payment $payment);
+    abstract public function isSuccessfulPayment(Payment $payment): bool;
 }
