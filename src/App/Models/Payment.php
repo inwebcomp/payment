@@ -21,6 +21,7 @@ use InWeb\Payment\Contracts\Payer;
  * @property Carbon      canceled_at
  * @property string      link
  * @property string|null gatewayUrl
+ * @property string|null transactionId
  */
 class Payment extends Entity
 {
@@ -105,10 +106,7 @@ class Payment extends Entity
         return '//some-link';
     }
 
-    /**
-     * @return bool
-     */
-    public function success()
+    public function success(): bool
     {
         $this->status = self::STATUS_COMPLETE;
 
@@ -121,13 +119,17 @@ class Payment extends Entity
         return $this->save();
     }
 
-    /**
-     * @return bool
-     */
-    public function cancel()
+    public function cancel(): bool
     {
         $this->status = self::STATUS_CANCELED;
         $this->canceled_at = now();
+
+        return $this->save();
+    }
+
+    public function fail(): bool
+    {
+        $this->status = self::STATUS_FAILED;
 
         return $this->save();
     }
@@ -148,5 +150,10 @@ class Payment extends Entity
     public function getGatewayUrlAttribute(): string | null
     {
         return optional($this->detail)['gateway_url'];
+    }
+
+    public function getTransactionIdAttribute(): string | null
+    {
+        return optional($this->detail)['transaction_id'];
     }
 }

@@ -27,7 +27,7 @@ trait PayableModel
                 'detail'       => $this->getPaymentDetail($payer),
             ]);
 
-            \InWeb\Payment\Payment::createPayment($dbPayment, '', '');
+            \InWeb\Payment\Payment::createPayment($dbPayment);
 
             return $dbPayment;
         });
