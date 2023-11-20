@@ -23,7 +23,7 @@ class Paynet extends Driver
         );
     }
 
-    public function createPayment(Payment $payment, ?string $successPath, ?string $cancelPath, $buttonInfo = null): Payment
+    public function createPayment(Payment $payment, ?string $successPath = null, ?string $cancelPath = null, $buttonInfo = null): Payment
     {
         /** @var Payable $payable */
         $payable = $payment->payable;
