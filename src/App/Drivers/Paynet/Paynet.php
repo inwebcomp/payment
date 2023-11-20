@@ -23,14 +23,22 @@ class Paynet extends Driver
         );
     }
 
-    public function createPayment(Payment $payment, $successPath, $cancelPath, $buttonInfo = null)
+    public function createPayment(Payment $payment, ?string $successPath, ?string $cancelPath, $buttonInfo = null): Payment
     {
         /** @var Payable $payable */
         $payable = $payment->payable;
-        
+
         /** @var Payer $payer */
         $payer = $payment->payer;
-        
+
+        if (!$successPath) {
+            throw new \Exception('Success path is required');
+        }
+
+        if (!$cancelPath) {
+            throw new \Exception('Cancel path is required');
+        }
+
         $prequest = new PaynetRequest();
         $prequest->ExternalID = $payment->id;
         $prequest->LinkSuccess = $successPath;
