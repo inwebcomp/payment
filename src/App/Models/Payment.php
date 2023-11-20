@@ -29,6 +29,7 @@ class Payment extends Entity
     const STATUS_COMPLETE = 1;
     const STATUS_FAILED = 2;
     const STATUS_CANCELED = 3;
+    const STATUS_INPROGRESS = 4;
 
     protected $fillable = [
         'payer_type',
@@ -89,6 +90,11 @@ class Payment extends Entity
                 'value' => self::STATUS_CANCELED,
                 'color' => 'grey'
             ],
+            [
+                'title' => __('В процессе'),
+                'value' => self::STATUS_INPROGRESS,
+                'color' => 'yellow'
+            ]
         ];
     }
 
@@ -112,9 +118,16 @@ class Payment extends Entity
 
         $payableClass = get_class($this->payable);
 
+        // @todo Wtf is this?
         if ($this->payable->status == $payableClass::STATUS_PAYMENT) {
             $this->payable->setStatus($payableClass::STATUS_WORKING);
         }
+
+        return $this->save();
+    }
+
+    public function beginProcess() {
+        $this->status = self::STATUS_INPROGRESS;
 
         return $this->save();
     }
