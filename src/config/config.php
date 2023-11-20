@@ -10,4 +10,6 @@ return [
         'date' => '',
         'cvv' => '',
     ],
+
+    'days_to_cancel_payment' => 2,
 ];

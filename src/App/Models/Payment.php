@@ -18,7 +18,11 @@ use InWeb\Payment\Contracts\Payer;
  * @property array       detail
  * @property Carbon      created_at
  * @property Carbon      updated_at
- * @property Carbon      canceled_at
+ * @property ?Carbon      canceled_at
+ * @property ?Carbon      process_start_at
+ * @property ?Carbon      process_end_at
+ * @property ?Carbon      failed_at
+ * @property ?Carbon      closed_at
  * @property string      link
  * @property string|null gatewayUrl
  * @property string|null transactionId
@@ -49,6 +53,10 @@ class Payment extends Entity
         'created_at',
         'updated_at',
         'canceled_at',
+        'process_start_at',
+        'process_end_at',
+        'failed_at',
+        'closed_at',
     ];
 
     /**
@@ -115,6 +123,8 @@ class Payment extends Entity
     public function success(): bool
     {
         $this->status = self::STATUS_COMPLETE;
+        $this->closed_at = now();
+        $this->process_end_at = now();
 
         $payableClass = get_class($this->payable);
 
@@ -128,6 +138,7 @@ class Payment extends Entity
 
     public function beginProcess() {
         $this->status = self::STATUS_INPROGRESS;
+        $this->process_start_at = now();
 
         return $this->save();
     }
@@ -136,6 +147,7 @@ class Payment extends Entity
     {
         $this->status = self::STATUS_CANCELED;
         $this->canceled_at = now();
+        $this->process_end_at = now();
 
         return $this->save();
     }
@@ -143,6 +155,8 @@ class Payment extends Entity
     public function fail(): bool
     {
         $this->status = self::STATUS_FAILED;
+        $this->failed_at = now();
+        $this->process_end_at = now();
 
         return $this->save();
     }
